@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+.env
+sqlite.db
+*.sqlite3
+
+# FastAPI/Backend specific
+backend/__pycache__/
+backend/.env
+backend/sqlite.db
+
+# Node / Frontend
+node_modules/
+dist/
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+
+# OS/Editor
+.DS_Store
+.vscode/
+.idea/

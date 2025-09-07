@@ -1,25 +1,13 @@
-import { useState } from "react";
-import { articles } from "./data";
-import ArticleList from "./ArticleList";
-import ArticleDetail from "./ArticleDetail";
-import "./App.css";
+import { Routes, Route, Navigate } from "react-router-dom";
+import ArticleListPage from "./pages/ArticleListPage.jsx";
+import ArticleDetailPage from "./pages/ArticleDetailPage.jsx";
 
-function App() {
-  const [selectedArticle, setSelectedArticle] = useState(null);
-
+export default function App() {
   return (
-    <div className="app-container">
-      {/* Left: List */}
-      <div className="article-list">
-        <ArticleList articles={articles} onSelect={setSelectedArticle} />
-      </div>
-
-      {/* Right: Detail */}
-      <div className="article-detail">
-        <ArticleDetail article={selectedArticle} />
-      </div>
-    </div>
+    <Routes>
+      <Route path="/" element={<ArticleListPage />} />
+      <Route path="/articles/:id" element={<ArticleDetailPage />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 }
-
-export default App;

@@ -1,10 +1,11 @@
 from fastapi import FastAPI, Depends, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 import json
-
+from typing import List
 from database import SessionLocal, engine, Base
 from models import Article
-from schemas import ArticleCreate, ArticleAnalysisResult, SimilarityResponse
+from schemas import ArticleCreate, ArticleCreateResponse, ArticleListItemOut, ArticleDetailOut ,SimilarityResponse
 from scraping import fetch_and_parse
 from ai_processor import analyze_text_with_ai, embed_summary
 from similarity import calculate_cosine_similarity
@@ -13,6 +14,15 @@ from similarity import calculate_cosine_similarity
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+
+# Allow frontend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Dependency
 def get_db():
@@ -23,7 +33,7 @@ def get_db():
         db.close()
 
 # ---------- Routes ----------
-@app.post("/articles", response_model=ArticleAnalysisResult)
+@app.post("/articles", response_model=ArticleCreateResponse)
 def create_article(payload: ArticleCreate, db: Session = Depends(get_db)):
     # 1. Scrape article text
     try:
@@ -71,30 +81,46 @@ def create_article(payload: ArticleCreate, db: Session = Depends(get_db)):
     return {
         "original_url": article.original_url,
         "translated_title": article.translated_title,
+        "publication_date": article.publication_date,  # add this line
         "long_summary": article.long_summary,
         "sentiment": article.sentiment,
         "entities": json.loads(article.entities),
         "embedding": json.loads(article.embedding),
-    }
+}
 
-@app.get("/articles")
+
+@app.get("/articles", response_model=List[ArticleListItemOut])
 def get_articles(db: Session = Depends(get_db)):
-    return db.query(Article).all()
+    rows = db.query(Article).all()
+    return [
+        {
+            "id": row.id,
+            "translated_title": row.translated_title or "",
+            "publication_date": row.publication_date,
+            "sentiment": row.sentiment or "Neutral",
+        }
+        for row in rows
+    ]
 
-@app.get("/articles/{id}", response_model=ArticleAnalysisResult)
+@app.get("/articles/{id}", response_model=ArticleDetailOut)
 def get_article(id: int, db: Session = Depends(get_db)):
     article = db.query(Article).filter(Article.id == id).first()
     if not article:
         raise HTTPException(status_code=404, detail="Article not found")
 
     return {
+        "id": article.id,
         "original_url": article.original_url,
-        "translated_title": article.translated_title,
-        "long_summary": article.long_summary,
-        "sentiment": article.sentiment,
-        "entities": json.loads(article.entities),
-        "embedding": json.loads(article.embedding),
+        "translated_title": article.translated_title or "",
+        "publication_date": article.publication_date,
+        "long_summary": article.long_summary or "",
+        "sentiment": article.sentiment or "Neutral",
+        "entities": json.loads(article.entities) if article.entities else {
+            "companies": [], "persons": [], "areas": []
+        },
     }
+
+
 
 @app.get("/articles/{id}/similar", response_model=SimilarityResponse)
 def get_similar_articles(id: int, db: Session = Depends(get_db)):
@@ -125,3 +151,5 @@ def get_similar_articles(id: int, db: Session = Depends(get_db)):
     similarities = sorted(similarities, key=lambda x: x["similarity_score"], reverse=True)[:3]
 
     return {"target_id": target_article.id, "similar_articles": similarities}
+
+
