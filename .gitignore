@@ -1,25 +1,35 @@
+# OS
+.DS_Store
+
 # Python
 __pycache__/
-*.pyc
-.venv/
+*.py[cod]
 *.egg-info/
-.env
-sqlite.db
-*.sqlite3
-
-# FastAPI/Backend specific
-backend/__pycache__/
-backend/.env
-backend/sqlite.db
-
-# Node / Frontend
-node_modules/
+build/
 dist/
-frontend/node_modules/
-frontend/dist/
-frontend/.env
+site/
 
-# OS/Editor
-.DS_Store
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Node
+node_modules/
+**/node_modules/
+dist/
+build/
+
+# Env and secrets
+.env
+**/.env
+.env.*
+**/.env.*
+
+# Databases
+*.db
+**/sqlite.db
+
+# IDE
 .vscode/
 .idea/
