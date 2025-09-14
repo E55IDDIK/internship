@@ -1,0 +1,20 @@
+# Runtime dependencies for the FastAPI backend
+# Generated from pyproject.toml to support pip installs.
+
+beautifulsoup4>=4.13.4
+fastapi>=0.116.1
+langchain>=0.3.27
+langchain-community>=0.3.27
+langchain-openai>=0.3.30
+lxml>=6.0.1
+numpy>=2.3.2
+openai>=1.99.8
+pydantic>=2.11.7
+python-dotenv>=1.1.1
+requests>=2.32.4
+sentence-transformers>=5.1.0
+sqlalchemy>=2.0.43
+uvicorn>=0.35.0
+
+# Optional, but often useful for speedier JSON with FastAPI
+# orjson>=3.10.5
