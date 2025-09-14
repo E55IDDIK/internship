@@ -79,6 +79,7 @@ def create_article(payload: ArticleCreate, db: Session = Depends(get_db)):
 
     # 5. Return clean response
     return {
+        "id": article.id,
         "original_url": article.original_url,
         "translated_title": article.translated_title,
         "publication_date": article.publication_date,  # add this line
@@ -91,7 +92,8 @@ def create_article(payload: ArticleCreate, db: Session = Depends(get_db)):
 
 @app.get("/articles", response_model=List[ArticleListItemOut])
 def get_articles(db: Session = Depends(get_db)):
-    rows = db.query(Article).all()
+    # Return newest first so recently added articles appear on top
+    rows = db.query(Article).order_by(Article.publication_date.desc()).all()
     return [
         {
             "id": row.id,

@@ -14,3 +14,8 @@ export async function getSimilar(id) {
   const { data } = await api.get(`/articles/${id}/similar`);
   return data; // { target_id, similar_articles: [{ id, original_url, translated_title, similarity_score }] }
 }
+
+export async function createArticle(url) {
+  const { data } = await api.post("/articles", { url });
+  return data;
+}

@@ -12,9 +12,7 @@ class Entities(BaseModel):
     companies: List[str] = []
     persons: List[str] = []
     areas: List[str] = []
-
-
-
+    
 # ---------- Output schemas for Week 5 ----------
 
 # Used by: GET /articles  (list page)
@@ -36,6 +34,7 @@ class ArticleDetailOut(BaseModel):
 
 # Used by: POST /articles  (creation response)
 class ArticleCreateResponse(BaseModel):
+    id: int
     original_url: HttpUrl
     translated_title: str
     publication_date: Optional[datetime] = None
