@@ -67,7 +67,14 @@ def analyze_text_with_ai(data: dict) -> dict:
         result: ArticleAnalysis = _llm_structured.invoke(prompt)
         return result.model_dump()
     except Exception as e:
-        raise RuntimeError(f"AI analysis failed: {e}")
+        # Normalize provider/transport errors into short, user-friendly messages
+        msg = str(e)
+        lowered = msg.lower()
+        if "429" in lowered or "rate limit" in lowered or "rate-limited" in lowered:
+            # Use a simple marker so the API layer can map to HTTP 429 cleanly
+            raise RuntimeError("AI_RATE_LIMIT: The AI service is temporarily busy. Please try again in a minute.")
+        # Generic fallback without leaking full provider payloads
+        raise RuntimeError("AI_ERROR: The AI service returned an error. Please retry shortly.")
 
 def embed_summary(summary: str) -> list[float]:
     #Generate a vector embedding for the summary.

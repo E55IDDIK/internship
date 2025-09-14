@@ -53,7 +53,13 @@ def create_article(payload: ArticleCreate, db: Session = Depends(get_db)):
             "text": scraped["text"]
         })
     except Exception as e:
-        raise HTTPException(status_code=502, detail=f"AI analysis failed: {e}")
+        # Map internal errors to concise, user-friendly HTTP responses
+        emsg = str(e)
+        if "AI_RATE_LIMIT" in emsg:
+            # 429 Too Many Requests — surface a clean message
+            raise HTTPException(status_code=429, detail="The AI is busy right now. Please try again in a minute.")
+        # Generic AI failure
+        raise HTTPException(status_code=502, detail="AI service error. Please try again shortly.")
 
     # 3. Generate embeddings
     try:

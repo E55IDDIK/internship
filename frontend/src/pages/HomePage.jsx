@@ -96,7 +96,18 @@ export default function HomePage() {
               Auto-Redirect
             </label>
           </div>
-          {error && <p className="mt-3 text-red-400">{error}</p>}
+          {error && (
+            <div className="mt-4 glass-card border border-red-500/30 bg-red-500/10 text-red-200 p-4 flex items-start gap-3 animate-slide-up">
+              <div className="shrink-0 mt-0.5">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5 text-red-400">
+                  <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l6.518 11.582c.718 1.275-.196 2.869-1.743 2.869H3.482c-1.547 0-2.46-1.594-1.743-2.869L8.257 3.1zM11 14a1 1 0 10-2 0 1 1 0 002 0zm-1-2a1 1 0 01-1-1V7a1 1 0 112 0v4a1 1 0 01-1 1z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div className="text-sm md:text-base">
+                <span className="font-medium text-red-100">{error}</span>
+              </div>
+            </div>
+          )}
           {success && !autoRedirect && (
             <div className="mt-4 glass-card border border-emerald-500/30 bg-emerald-500/10 text-emerald-200 p-4 flex items-start gap-3 animate-slide-up">
               <div className="shrink-0 mt-0.5">
