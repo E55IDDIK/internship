@@ -62,7 +62,7 @@ export default function ArticleListPage() {
 
   return (
     <div className="min-h-[calc(100vh-56px)] text-slate-100">
-      <div className="mx-auto max-w-6xl px-4 py-8">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-8">
         <h1 className="text-2xl md:text-3xl font-bold">Articles</h1>
 
         {/* Search + Filters */}
@@ -103,7 +103,7 @@ export default function ArticleListPage() {
         </div>
 
         {loading && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 items-stretch">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 items-stretch">
             {Array.from({ length: 6 }).map((_, i) => (
               <div key={i} className="block h-full min-h-40 rounded-2xl p-[1px] bg-gradient-to-r from-blue-500/25 via-cyan-400/25 to-blue-500/25">
                 <div className="rounded-2xl border border-sky-500/10 bg-slate-900/75 backdrop-blur p-4 h-full">
@@ -121,7 +121,7 @@ export default function ArticleListPage() {
         )}
 
         {!!articles.length && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 items-stretch">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 items-stretch">
             {visible.map((a) => (
               <ArticleCard key={a.id} article={a} />
             ))}
