@@ -30,7 +30,7 @@ An **end-to-end AI-powered web application** that fetches, analyzes, and visuali
 - ⚡ FastAPI  
 - 🗄️ SQLite (Turso-ready)  
 - 🧾 SQLAlchemy ORM  
-- 🤖 OpenAI GPT-4o-mini + HuggingFace MiniLM  
+- 🤖 Deepseek v3-0324 + HuggingFace MiniLM  
 - 📐 Cosine Similarity  
 
 **Frontend** 🎨  
